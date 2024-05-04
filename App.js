@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList, TouchableOpacity } from 'react-native';
 
 export default function App() {
   const [name, setName] = useState('Dev')
@@ -16,10 +16,49 @@ export default function App() {
   const incrementHandler=()=>{
     setValue(0)
   }
+
+  const [people, setPeople] = useState([
+    {name: 'Joness', key:1},
+    {name: 'Jacob', key:2},
+    {name: 'Jose', key:3},
+    {name: 'Tramp', key:4},
+    {name: 'Zaki', key:5},
+    {name: 'Pioli', key:6},
+  ])
+
+  const pressHandler=(key)=>{
+    console.log(key)
+    setPeople((prevPeople)=>{
+      return prevPeople.filter(person => person.key != key)
+    })
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.text}>React native, yeeeaaah!!</Text>
+      </View>
+
+      <View style={styles.list}>
+        <Text style={styles.formHeader}>Lists</Text>
+          <FlatList
+            // numColumns={3}
+            keyExtractor={(item)=> item.key}
+            data={people}
+            renderItem={({ item })=>(
+              <TouchableOpacity onPress={()=>pressHandler(item.key)}>
+                <Text style={styles.person}>{item.name}</Text>
+              </TouchableOpacity>
+            )}
+          />
+         {/* <ScrollView>
+            {people.map((person)=>{
+              return(
+                <View key={person.key}>
+                  <Text style={styles.person}>{person.name}</Text>
+                </View>
+              )
+            })}
+         </ScrollView> */}
       </View>
       
       <View style={styles.body}>
@@ -114,7 +153,25 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth:1,
     width: 250,
-    paddingLeft:10,
+    paddingHorizontal:10,
     margin: 6,
+  },
+  list: {
+    backgroundColor: 'orange',
+    width: 400,
+    height:200 ,
+    borderRadius: 10,
+    marginTop: 17,
+    paddingHorizontal:10,
+  },
+  person: {
+    height: 50,
+    marginVertical:10,
+    borderWidth:2,
+    paddingHorizontal:20,
+    paddingVertical:10,
+    borderRadius:9,
+    borderColor:'grey',
+    backgroundColor:'green'
   }
 });
